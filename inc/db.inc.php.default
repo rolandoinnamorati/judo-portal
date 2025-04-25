@@ -1,0 +1,35 @@
+<?php
+
+if(!isset($_SERVER['DOCUMENT_ROOT']))
+    $_SERVER['DOCUMENT_ROOT'] = dirname(__FILE__, 2);
+
+if (!defined("_DB_INC_")) {
+
+    define("_DB_INC_", 1);
+
+    define("DB_HOST", "");
+    define("DB_USER", "");
+    define("DB_PASS", "");
+    define("DB_NAME", "DELTAMAP");
+
+    require_once $_SERVER['DOCUMENT_ROOT'].'/bootstrap.php';
+
+    function db_open($host, $user, $pass, $db)
+    {
+        if (($db_conn = new mysqli($host, $user, $pass, $db)) === FALSE) {
+            return false;
+        }
+
+        return $db_conn;
+    }
+
+    function db_close($conn)
+    {
+        return mysqli_close($conn);
+    }
+
+    function db_get_error($format = 'HTML')
+    {
+        return "Errore durante il recupero della risorsa richiesta";
+    }
+}

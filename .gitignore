@@ -1,0 +1,19 @@
+#
+*Thumbs.db
+
+# database configuration
+inc/db.inc.php
+
+# attach
+upload_file
+
+# phpstorm
+.idea/
+
+vendor/
+
+composer.lock
+
+*.ini
+
+.htaccess

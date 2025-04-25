@@ -1,0 +1,14 @@
+<!DOCTYPE html><html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Errore <?= $code ?></title>
+  <link rel="stylesheet" href="/css/error.css" type="text/css">
+</head>
+<body>
+
+  <img src="/img/error.png" alt="Errore" class="error-image">
+  <div class="error-code"><?= htmlspecialchars($code) ?></div>
+  <div class="error-message"><?= htmlspecialchars($msg) ?></div>
+
+</body>
+</html>
