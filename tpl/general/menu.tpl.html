@@ -1,0 +1,26 @@
+<div class="sidebar">
+    <ul class="menu">
+        <?php
+            foreach($modules as $module) {
+                echo '<li class="menu-item">';
+                echo '<a href="' . $module['url'] . '" class="menu-link"><i class="' . $module['icon'] . '"></i><span>' . $module['name'] . '</span><i class="fas fa-chevron-down chevron"></i></a>';
+                echo '<ul class="submenu">';
+                foreach($module['environments'] as $environment) {
+                    echo '<li><a href="' . $environment['url'] . '" class="sub-item">' . $environment['name'] . '</a></li>';
+                }
+                echo '</ul>';
+                echo '</li>';
+            }
+        ?>
+    </ul>
+</div>
+
+<script>
+    document.querySelectorAll('.menu-link').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const item = link.parentElement;
+            item.classList.toggle('open');
+        });
+    });
+</script>

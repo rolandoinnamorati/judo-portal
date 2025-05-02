@@ -1,0 +1,99 @@
+.main-header {
+    position: absolute;
+    top: 0;
+    z-index: 999;
+    width: 100%;
+    background-color: #222;
+    color: white;
+    padding: 0.75rem 2rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1400px;
+    margin-left: 2%;
+    margin-right: 2% !important;
+}
+
+.header-left h1 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: #fff;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+/* Notifiche */
+.notification-icon {
+    position: relative;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.notification-icon .fas {
+    color: #f1f1f1;
+}
+
+.notification-badge {
+    position: absolute;
+    top: -6px;
+    right: -8px;
+    background: red;
+    color: white;
+    font-size: 0.65rem;
+    padding: 2px 5px;
+    border-radius: 50%;
+}
+
+.profile-menu {
+    position: relative;
+    display: inline-block;
+}
+
+.avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid #4fc3f7;
+}
+
+.dropdown {
+    display: none;
+    position: absolute;
+    top: 110%;
+    right: 0;
+    background: #222;
+    border: 1px solid #333;
+    border-radius: 5px;
+    padding: 0.5rem 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.6);
+    z-index: 1000;
+}
+
+.dropdown a {
+    display: block;
+    padding: 0.5rem 1rem;
+    color: #ccc;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.dropdown a:hover {
+    background: #444;
+    color: #fff;
+}
+
+/* Mostra dropdown quando si passa su tutta l’area menu */
+.profile-menu:hover .dropdown {
+    display: block;
+}
+
