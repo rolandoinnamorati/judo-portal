@@ -230,3 +230,9 @@ input {
 button {
     cursor: pointer;
 }
+
+.error-msg{
+	margin-top: 0px;
+	margin-bottom: 0px;
+	color: red;
+	font-size: 12px;}
