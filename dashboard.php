@@ -17,7 +17,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] != true) {
 }
 
 $smarty->assign('title', 'Dashboard');
-$smarty->assign('modules', $modules);
+$smarty->assign('modules', $filtered_modules);
 $smarty->display('dashboard.tpl.html');
 exit(0);
 ?>

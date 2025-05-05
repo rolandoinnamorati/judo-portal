@@ -64,6 +64,7 @@ $smarty->assign('email_err', $email_err);
 $smarty->assign('password_err', $password_err);
 $smarty->assign('error', $error);
 $smarty->assign('title', 'Login');
+$smarty->assign('active_tab','login');
 $smarty->display('login.tpl.html');
 exit(0);
 ?>

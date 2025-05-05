@@ -1,29 +1,50 @@
-CREATE TABLE modules (
+<?php
+require "inc/constants.inc.php"; // Adjust paths as needed
+require "inc/db.inc.php";
+
+if (!($conn = db_open(DB_HOST, DB_USER, DB_PASS, DB_NAME))) {
+    die("Database connection failed: " . mysqli_connect_error());
+}
+
+// Function to execute SQL and handle errors
+function executeQuery($conn, $sql) {
+    if (!mysqli_query($conn, $sql)) {
+        die("SQL Error: " . mysqli_error($conn) . "\nSQL: " . $sql);
+    }
+}
+
+// 1. Create Modules Table
+executeQuery($conn, "CREATE TABLE IF NOT EXISTS modules (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL UNIQUE,
     icon VARCHAR(255) DEFAULT NULL,
+    active BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
+)");
 
-CREATE TABLE environments (
+// 2. Create Environments Table
+executeQuery($conn, "CREATE TABLE IF NOT EXISTS environments (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL UNIQUE,
     module_id INT NOT NULL,
     url VARCHAR(255) NOT NULL,
+    active BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (module_id) REFERENCES modules(id) ON DELETE CASCADE
-);
+)");
 
-CREATE TABLE roles (
+// 3. Create Roles Table
+executeQuery($conn, "CREATE TABLE IF NOT EXISTS roles (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL UNIQUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
+)");
 
-CREATE TABLE permissions (
+// 4. Create Permissions Table
+executeQuery($conn, "CREATE TABLE IF NOT EXISTS permissions (
     id INT AUTO_INCREMENT PRIMARY KEY,
     operation INT NOT NULL,
     role_id INT NOT NULL,
@@ -32,18 +53,20 @@ CREATE TABLE permissions (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE CASCADE,
     FOREIGN KEY (environment_id) REFERENCES environments(id) ON DELETE CASCADE
-);
+)");
 
-CREATE TABLE users (
+// 5. Create Users Table
+executeQuery($conn, "CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     active BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
+)");
 
-CREATE TABLE user_has_roles (
+// 6. Create User Has Roles Table
+executeQuery($conn, "CREATE TABLE IF NOT EXISTS user_has_roles (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     role_id INT NOT NULL,
@@ -51,4 +74,9 @@ CREATE TABLE user_has_roles (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE CASCADE
-);
+)");
+
+echo "Database schema creation completed.\n";
+
+$conn->close();
+?>

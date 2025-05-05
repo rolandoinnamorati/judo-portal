@@ -11,7 +11,7 @@
 </head>
 <body style="overflow: hidden;">
 <section class="vh-100">
-	<div class="container" id="container">
+	<div class="container" id="container" {if isset($active_tab) && $active_tab eq 'register'}class="right-panel-active"{/if}>
 		<div class="form-container sign-up-container">
 			<form action="register.php" method="POST">
 				<h1>Create Account</h1>
@@ -21,9 +21,12 @@
 					<a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
 				</div>
 				<span>or use your email for registration</span>
-				<input type="text" name="name" placeholder="Name" />
-				<input type="email" name="email" placeholder="Email" />
-				<input type="password" name="password" placeholder="Password" />
+				<input type="text" required name="name" placeholder="Name" />
+				{if isset($reg_name_err)}<p class="error-msg">{$reg_name_err}</p>{/if}
+				<input type="email" required name="email" placeholder="Email" />
+				{if isset($reg_email_err)}<p class="error-msg">{$reg_email_err}</p>{/if}
+				<input type="password" required name="password" placeholder="Password" />
+				{if isset($reg_password_err)}<p class="error-msg">{$reg_password_err}</p>{/if}
 				<button>Sign Up</button>
 			</form>
 		</div>
@@ -84,6 +87,10 @@
 			button: "OK",
 		});
 	});
+
+	{if isset($active_tab) && $active_tab eq 'register'}
+	$('#container').addClass("right-panel-active");
+	{/if}
 </script>
 </body>
 </html>
