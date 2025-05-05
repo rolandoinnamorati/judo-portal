@@ -10,10 +10,8 @@ upload_file
 # phpstorm
 .idea/
 
-vendor/
-
-composer.lock
-
 *.ini
 
 .htaccess
+
+tpl_c/

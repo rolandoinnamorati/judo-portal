@@ -1,6 +1,13 @@
 <?php
 require "inc/constants.inc.php";
 require "inc/db.inc.php";
+require_once('libs/smarty/Smarty.class.php');
+
+$smarty = new \Smarty\Smarty();
+$smarty->setTemplateDir('tpl/');
+$smarty->setCompileDir('tpl_c/');
+$smarty->setCacheDir('cache/');
+$smarty->setConfigDir('configs/');
 
 define("LANDING_PAGE", "dashboard.php");
 
@@ -15,7 +22,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
 if($_SERVER["REQUEST_METHOD"] == "POST"){
     $email_err = $password_err = $login_err = "";
     $email = $password = null;
-    
+
     if(empty(trim($_POST["email"]))){
         $email_err = "Inserisci una email valida.";
     } else{
@@ -27,7 +34,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     } else{
         $password = trim($_POST["password"]);
     }
-    
+
     if (!($stmt = $conn->prepare("SELECT * FROM users WHERE email=?"))) {
         error(500);
     }
@@ -53,7 +60,10 @@ if (!isset($_POST['loggedin']) || $_POST['loggedin'] != 1)
 	goto display_login;
 
 display_login:
-$title = 'Login';
-require 'tpl/login.tpl.html';
+$smarty->assign('email_err', $email_err);
+$smarty->assign('password_err', $password_err);
+$smarty->assign('error', $error);
+$smarty->assign('title', 'Login');
+$smarty->display('login.tpl.html');
 exit(0);
 ?>

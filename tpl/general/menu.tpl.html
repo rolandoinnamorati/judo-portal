@@ -1,17 +1,17 @@
 <div class="sidebar">
     <ul class="menu">
-        <?php
-            foreach($modules as $module) {
-                echo '<li class="menu-item">';
-                echo '<a href="' . $module['url'] . '" class="menu-link"><i class="' . $module['icon'] . '"></i><span>' . $module['name'] . '</span><i class="fas fa-chevron-down chevron"></i></a>';
-                echo '<ul class="submenu">';
-                foreach($module['environments'] as $environment) {
-                    echo '<li><a href="' . $environment['url'] . '" class="sub-item">' . $environment['name'] . '</a></li>';
-                }
-                echo '</ul>';
-                echo '</li>';
-            }
-        ?>
+        {foreach from=$modules item=module}
+        <li class="menu-item">
+            <a href="{$module.url}" class="menu-link">
+                <i class="{$module.icon}"></i><span>{$module.name}</span><i class="fas fa-chevron-down chevron"></i>
+            </a>
+            <ul class="submenu">
+                {foreach from=$module.environments item=environment}
+                <li><a href="{$environment.url}" class="sub-item">{$environment.name}</a></li>
+                {/foreach}
+            </ul>
+        </li>
+        {/foreach}
     </ul>
 </div>
 
