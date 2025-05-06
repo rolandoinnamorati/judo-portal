@@ -1,6 +1,7 @@
 <?php
 require "constants.inc.php";
 require "db.inc.php";
+require "template.inc.php";
 
 if (!($conn = db_open(DB_HOST, DB_USER, DB_PASS, DB_NAME)))
     error(500);
@@ -68,3 +69,5 @@ foreach ($modules as $key => $module) {
         $filtered_modules[] = $module;
     }
 }
+
+$smarty->assign('modules', $filtered_modules);

@@ -6,7 +6,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] != true) {
     exit;
 }
 
-$smarty->assign('title', 'Dashboard');
-$smarty->display('dashboard.tpl.html');
+$smarty->assign('title', 'Profile');
+$smarty->display('profile.tpl.html');
 exit(0);
 ?>

@@ -14,7 +14,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    max-width: 1400px;
+    max-width: 100%;
     margin-left: 2%;
     margin-right: 2% !important;
 }
@@ -30,6 +30,13 @@
     align-items: center;
     gap: 1.5rem;
 }
+
+/* New CSS for Username */
+.header-right .username {
+    color: #fff;
+    margin-right: 1rem; /* Adjust spacing as needed */
+}
+
 
 /* Notifiche */
 .notification-icon {
@@ -96,4 +103,3 @@
 .profile-menu:hover .dropdown {
     display: block;
 }
-
