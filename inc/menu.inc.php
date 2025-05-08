@@ -71,3 +71,18 @@ foreach ($modules as $key => $module) {
 }
 
 $smarty->assign('modules', $filtered_modules);
+
+$sql = "SELECT profile_image FROM users WHERE id = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$user = $result->fetch_assoc();
+
+if ($user) {
+    $profile_image = $user['profile_image'];
+} else {
+    $profile_image = null; // Or a default image filename
+}
+
+$smarty->assign('profile_image', $profile_image);

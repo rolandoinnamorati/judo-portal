@@ -1,17 +1,11 @@
 <?php
-require "inc/constants.inc.php"; // Adjust paths as needed
+require "inc/constants.inc.php";
 require "inc/db.inc.php";
 
 if (!($conn = db_open(DB_HOST, DB_USER, DB_PASS, DB_NAME))) {
     die("Database connection failed: " . mysqli_connect_error());
 }
 
-// Function to execute SQL and handle errors
-function executeQuery($conn, $sql) {
-    if (!mysqli_query($conn, $sql)) {
-        die("SQL Error: " . mysqli_error($conn) . "\nSQL: " . $sql);
-    }
-}
 
 // 1. Create Modules Table
 executeQuery($conn, "CREATE TABLE IF NOT EXISTS modules (

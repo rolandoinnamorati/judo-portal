@@ -1,6 +1,95 @@
 {include file='general/layout_head.tpl.html'}
 
-PROFILO
+<link rel="stylesheet" href="css/profile.css">
+<div class="profile-container">
+    <div class="profile-card user-profile-card">
+        <h2>My Profile</h2>
+        <div class="profile-image">
+            {if $user.profile_image}
+            <img src="uploads/{$user.profile_image}" alt="Profile Image" class="rounded-image">
+            {else}
+            <img src="images/default_profile.png" alt="Default Profile Image" class="rounded-image">
+            {/if}
+        </div>
+        <p><strong>Email:</strong> {$user.email}</p>
+
+        <div class="profile-image-upload-section">
+            <h4>Change Profile Image</h4>
+            <form id="upload-profile-image-form" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="profile_image">Choose New Image:</label>
+                    <input type="file" id="profile_image" name="profile_image" accept="image/*">
+                </div>
+                <button type="submit" class="button small-button">Upload Image</button>
+                <div id="profile-image-message" class="form-message"></div>
+            </form>
+        </div>
+
+        <div class="password-change-section">
+            <h4>Change Password</h4>
+            <form id="change-password-form" method="post">  <div class="form-group">
+                <label for="current_password">Current Password:</label>
+                <input type="password" id="current_password" name="current_password" required> </div>
+                <div class="form-group">
+                    <label for="new_password">New Password:</label>
+                    <input type="password" id="new_password" name="new_password" required> </div>
+                <div class="form-group">
+                    <label for="confirm_password">Confirm New Password:</label>
+                    <input type="password" id="confirm_password" name="confirm_password" required> </div>
+                <button type="submit" class="button small-button" name="change_password">Change Password</button> <div id="error-message" class="form-message">{$password_change_message}</div>  </form>
+        </div>
+    </div>
+
+    {if $user_has_role_club}
+    <div class="profile-card club-profile-card">
+        <h2>My Club</h2>
+        {if $club}
+        <p><strong>Name:</strong> {$club.name}</p>
+        <p><strong>Address:</strong> {$club.address}</p>
+        <p><strong>City:</strong> {$club.city}</p>
+        <p><strong>Province:</strong> {$club.province}</p>
+        <p><strong>Contact Name:</strong> {$club.contact_name}</p>
+        <p><strong>Contact Phone:</strong> {$club.contact_phone}</p>
+        <p><strong>Affiliation Number:</strong> {$club.affiliation_number}</p>
+        <a href="edit_club.php" class="button small-button">Edit Club Details</a>
+        {else}
+        <p class="no-club-message">No club information found. Please create your club profile.</p>
+        <a href="create_club.php" class="button small-button">Create Club Profile</a>
+        {/if}
+    </div>
+    {/if}
+</div>
+
+<script>
+    document.getElementById('upload-profile-image-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const form = this;
+        const formData = new FormData(form);
+
+        fetch('upload_profile_image.php', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+                const messageDiv = document.getElementById('profile-image-message');
+                if (data.success) {
+                    messageDiv.textContent = data.message;
+                    messageDiv.className = 'form-message success';
+                    // Optionally update the displayed image:
+                    document.querySelector('.profile-image img').src = 'uploads/' + data.filename;
+                } else {
+                    messageDiv.textContent = data.message;
+                    messageDiv.className = 'form-message error';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('profile-image-message').textContent = 'An error occurred during upload.';
+                document.getElementById('profile-image-message').className = 'form-message error';
+            });
+    });
+</script>
 
 {include file='general/layout_foot.tpl.html'}
-

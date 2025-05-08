@@ -6,12 +6,6 @@ if (!($conn = db_open(DB_HOST, DB_USER, DB_PASS, DB_NAME))) {
     die("Database connection failed: " . mysqli_connect_error());
 }
 
-function executeQuery($conn, $sql) {
-    if (!mysqli_query($conn, $sql)) {
-        die("SQL Error: " . mysqli_error($conn) . "\nSQL: " . $sql);
-    }
-}
-
 // 1. Insert Modules
 executeQuery($conn, "INSERT INTO modules (name, icon) VALUES
     ('Base','fas fa-tachometer-alt'),
