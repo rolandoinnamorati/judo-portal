@@ -1,63 +1,84 @@
 {include file='general/layout_head.tpl.html'}
 
-<link rel="stylesheet" href="css/profile.css">
-<div class="profile-container">
-    <div class="profile-card user-profile-card">
-        <h2>My Profile</h2>
-        <div class="profile-image">
-            {if $user.profile_image}
-            <img src="uploads/{$user.profile_image}" alt="Profile Image" class="rounded-image">
-            {else}
-            <img src="images/default_profile.png" alt="Default Profile Image" class="rounded-image">
-            {/if}
-        </div>
-        <p><strong>Email:</strong> {$user.email}</p>
+<div class="container my-3">
+    <div class="row justify-content-center">
+        <div class="col-lg-5 col-md-6 col-sm-12 mb-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body py-3 px-3">
+                    <h4 class="card-title text-center mb-3">My Profile</h4>
+                    <div class="text-center mb-3">
+                        {if $user.profile_image}
+                        <img src="uploads/{$user.profile_image}" alt="Profile Image" class="img-fluid rounded-circle border border-2 p-1" style="width: 120px; height: 120px; object-fit: cover;">
+                        {else}
+                        <img src="images/default_profile.png" alt="Default Profile Image" class="img-fluid rounded-circle border border-2 p-1" style="width: 120px; height: 120px; object-fit: cover;">
+                        {/if}
+                        <p class="small text-muted mt-2"><strong>Email:</strong> {$user.email}</p>
+                    </div>
 
-        <div class="profile-image-upload-section">
-            <h4>Change Profile Image</h4>
-            <form id="upload-profile-image-form" enctype="multipart/form-data">
-                <div class="form-group">
-                    <label for="profile_image">Choose New Image:</label>
-                    <input type="file" id="profile_image" name="profile_image" accept="image/*">
+                    <div class="mb-3">
+                        <small class="d-block fw-bold mb-2">Change Profile Image</small>
+                        <form id="upload-profile-image-form" enctype="multipart/form-data">
+                            <div class="mb-2">
+                                <label for="profile_image" class="form-label form-label-sm">Choose New Image:</label>
+                                <input type="file" class="form-control form-control-sm" id="profile_image" name="profile_image" accept="image/*">
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-sm w-100">Upload Image</button>
+                            <div id="profile-image-message" class="mt-4 small"></div>
+                        </form>
+                    </div>
+
+                    <hr class="my-3">
+
+                    <div class="mb-2">
+                        <h5 class="fw-bold mb-2">Change Password</h5>
+                        <form id="change-password-form" method="post">
+                            <div class="mb-2">
+                                <label for="current_password" class="form-label form-label-sm">Current Password:</label>
+                                <input type="password" class="form-control form-control-sm" id="current_password" name="current_password" required>
+                            </div>
+                            <div class="mb-2">
+                                <label for="new_password" class="form-label form-label-sm">New Password:</label>
+                                <input type="password" class="form-control form-control-sm" id="new_password" name="new_password" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="confirm_password" class="form-label form-label-sm">Confirm New Password:</label>
+                                <input type="password" class="form-control form-control-sm" id="confirm_password" name="confirm_password" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-sm w-100" name="change_password">Change Password</button>
+                            <div id="error-message" class="mt-2 small">{$password_change_message}</div>
+                        </form>
+                    </div>
                 </div>
-                <button type="submit" class="button small-button">Upload Image</button>
-                <div id="profile-image-message" class="form-message"></div>
-            </form>
+            </div>
         </div>
 
-        <div class="password-change-section">
-            <h4>Change Password</h4>
-            <form id="change-password-form" method="post">  <div class="form-group">
-                <label for="current_password">Current Password:</label>
-                <input type="password" id="current_password" name="current_password" required> </div>
-                <div class="form-group">
-                    <label for="new_password">New Password:</label>
-                    <input type="password" id="new_password" name="new_password" required> </div>
-                <div class="form-group">
-                    <label for="confirm_password">Confirm New Password:</label>
-                    <input type="password" id="confirm_password" name="confirm_password" required> </div>
-                <button type="submit" class="button small-button" name="change_password">Change Password</button> <div id="error-message" class="form-message">{$password_change_message}</div>  </form>
+        {if $user_has_role_club}
+        <div class="col-lg-7 col-md-6 col-sm-12 mb-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body py-3 px-3">
+                    <h4 class="card-title text-center mb-3">My Club</h4>
+                    {if $club}
+                    <ul class="list-group list-group-flush small mb-3">
+                        <li class="list-group-item py-1"><strong>Name:</strong> {$club.name}</li>
+                        <li class="list-group-item py-1"><strong>Address:</strong> {$club.address}</li>
+                        <li class="list-group-item py-1"><strong>City:</strong> {$club.city}</li>
+                        <li class="list-group-item py-1"><strong>Province:</strong> {$club.province}</li>
+                        <li class="list-group-item py-1"><strong>Contact Name:</strong> {$club.contact_name}</li>
+                        <li class="list-group-item py-1"><strong>Contact Phone:</strong> {$club.contact_phone}</li>
+                        <li class="list-group-item py-1"><strong>Affiliation Number:</strong> {$club.affiliation_number}</li>
+                    </ul>
+                    <a href="edit_club.php" class="btn btn-success btn-sm w-100">Edit Club Details</a>
+                    {else}
+                    <div class="alert alert-info small text-center py-2" role="alert">
+                        No club information found. Please create your club profile.
+                    </div>
+                    <a href="create_club.php" class="btn btn-success btn-sm w-100">Create Club Profile</a>
+                    {/if}
+                </div>
+            </div>
         </div>
-    </div>
-
-    {if $user_has_role_club}
-    <div class="profile-card club-profile-card">
-        <h2>My Club</h2>
-        {if $club}
-        <p><strong>Name:</strong> {$club.name}</p>
-        <p><strong>Address:</strong> {$club.address}</p>
-        <p><strong>City:</strong> {$club.city}</p>
-        <p><strong>Province:</strong> {$club.province}</p>
-        <p><strong>Contact Name:</strong> {$club.contact_name}</p>
-        <p><strong>Contact Phone:</strong> {$club.contact_phone}</p>
-        <p><strong>Affiliation Number:</strong> {$club.affiliation_number}</p>
-        <a href="edit_club.php" class="button small-button">Edit Club Details</a>
-        {else}
-        <p class="no-club-message">No club information found. Please create your club profile.</p>
-        <a href="create_club.php" class="button small-button">Create Club Profile</a>
         {/if}
     </div>
-    {/if}
 </div>
 
 <script>
@@ -76,18 +97,18 @@
                 const messageDiv = document.getElementById('profile-image-message');
                 if (data.success) {
                     messageDiv.textContent = data.message;
-                    messageDiv.className = 'form-message success';
+                    messageDiv.className = 'alert alert-success small mt-2';
                     // Optionally update the displayed image:
-                    document.querySelector('.profile-image img').src = 'uploads/' + data.filename;
+                    document.querySelector('.img-fluid.rounded-circle').src = 'uploads/' + data.filename;
                 } else {
                     messageDiv.textContent = data.message;
-                    messageDiv.className = 'form-message error';
+                    messageDiv.className = 'alert alert-danger small mt-2';
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
                 document.getElementById('profile-image-message').textContent = 'An error occurred during upload.';
-                document.getElementById('profile-image-message').className = 'form-message error';
+                document.getElementById('profile-image-message').className = 'alert alert-danger small mt-2';
             });
     });
 </script>

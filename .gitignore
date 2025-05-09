@@ -5,7 +5,7 @@
 inc/db.inc.php
 
 # attach
-upload_file
+uploads/
 
 # phpstorm
 .idea/
