@@ -67,17 +67,117 @@
                         <li class="list-group-item py-1"><strong>Contact Phone:</strong> {$club.contact_phone}</li>
                         <li class="list-group-item py-1"><strong>Affiliation Number:</strong> {$club.affiliation_number}</li>
                     </ul>
-                    <a href="edit_club.php" class="btn btn-success btn-sm w-100">Edit Club Details</a>
+                    <button type="button" class="btn btn-success btn-sm w-100" data-bs-toggle="modal" data-bs-target="#editClubProfileModal">
+                        Edit Club Details
+                    </button>
                     {else}
                     <div class="alert alert-info small text-center py-2" role="alert">
                         No club information found. Please create your club profile.
                     </div>
-                    <a href="create_club.php" class="btn btn-success btn-sm w-100">Create Club Profile</a>
+                    <button type="button" class="btn btn-success btn-sm w-100" data-bs-toggle="modal" data-bs-target="#createClubProfileModal">
+                        Create Club Profile
+                    </button>
                     {/if}
                 </div>
             </div>
         </div>
         {/if}
+    </div>
+</div>
+
+<div class="modal fade" id="createClubProfileModal" tabindex="-1" aria-labelledby="createClubProfileModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createClubProfileModalLabel">Create Club Profile</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="profile.php" method="POST">
+                <div class="modal-body">
+                    <input type="hidden" name="create_club_profile" value="1">
+                    <div class="mb-3">
+                        <label for="club_name" class="form-label">Club Name <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="club_name" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="club_address" class="form-label">Address</label>
+                        <input type="text" class="form-control" id="club_address" name="address">
+                    </div>
+                    <div class="mb-3">
+                        <label for="club_city" class="form-label">City</label>
+                        <input type="text" class="form-control" id="club_city" name="city">
+                    </div>
+                    <div class="mb-3">
+                        <label for="club_province" class="form-label">Province</label>
+                        <input type="text" class="form-control" id="club_province" name="province">
+                    </div>
+                    <div class="mb-3">
+                        <label for="club_contact_name" class="form-label">Contact Name</label>
+                        <input type="text" class="form-control" id="club_contact_name" name="contact_name">
+                    </div>
+                    <div class="mb-3">
+                        <label for="club_contact_phone" class="form-label">Contact Phone</label>
+                        <input type="text" class="form-control" id="club_contact_phone" name="contact_phone">
+                    </div>
+                    <div class="mb-3">
+                        <label for="club_affiliation_number" class="form-label">Affiliation Number</label>
+                        <input type="text" class="form-control" id="club_affiliation_number" name="affiliation_number">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Create Profile</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editClubProfileModal" tabindex="-1" aria-labelledby="editClubProfileModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editClubProfileModalLabel">Edit Club Profile</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="profile.php" method="POST">
+                <div class="modal-body">
+                    <input type="hidden" name="update_club_profile" value="1">
+                    <div class="mb-3">
+                        <label for="edit_club_name" class="form-label">Club Name <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="edit_club_name" name="name" value="{$club.name|escape}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_club_address" class="form-label">Address</label>
+                        <input type="text" class="form-control" id="edit_club_address" name="address" value="{$club.address|escape}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_club_city" class="form-label">City</label>
+                        <input type="text" class="form-control" id="edit_club_city" name="city" value="{$club.city|escape}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_club_province" class="form-label">Province</label>
+                        <input type="text" class="form-control" id="edit_club_province" name="province" value="{$club.province|escape}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_club_contact_name" class="form-label">Contact Name</label>
+                        <input type="text" class="form-control" id="edit_club_contact_name" name="contact_name" value="{$club.contact_name|escape}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_club_contact_phone" class="form-label">Contact Phone</label>
+                        <input type="text" class="form-control" id="edit_club_contact_phone" name="contact_phone" value="{$club.contact_phone|escape}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_club_affiliation_number" class="form-label">Affiliation Number</label>
+                        <input type="text" class="form-control" id="edit_club_affiliation_number" name="affiliation_number" value="{$club.affiliation_number|escape}">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
@@ -110,6 +210,10 @@
                 document.getElementById('profile-image-message').textContent = 'An error occurred during upload.';
                 document.getElementById('profile-image-message').className = 'alert alert-danger small mt-2';
             });
+
+        $('#create_club_profile').on('click', function() {
+
+        });
     });
 </script>
 

@@ -40,6 +40,7 @@ if ($user_has_role_club) {
 }
 
 $password_change_message = "";
+$club_message = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['change_password'])) {
     $current_password = $_POST['current_password'] ?? '';
     $new_password = $_POST['new_password'] ?? '';
@@ -68,7 +69,130 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['change_password'])) {
         }
     }
 }
+elseif ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['create_club_profile'])) {
+    if (!$user_has_role_club) {
+        $club_message = "You do not have permission to create a club profile.";
+    } else {
+        $name = trim($_POST['name'] ?? '');
+        $address = trim($_POST['address'] ?? '');
+        $city = trim($_POST['city'] ?? '');
+        $province = trim($_POST['province'] ?? '');
+        $contact_name = trim($_POST['contact_name'] ?? '');
+        $contact_phone = trim($_POST['contact_phone'] ?? '');
+        $affiliation_number = trim($_POST['affiliation_number'] ?? '');
+
+        if (empty($name)) {
+            $club_message = "Club Name is required.";
+        } else {
+            $sql_check_club = "SELECT id FROM clubs WHERE user_id = ?";
+            $stmt_check_club = $conn->prepare($sql_check_club);
+            $stmt_check_club->bind_param("i", $user_id);
+            $stmt_check_club->execute();
+            $result_check_club = $stmt_check_club->get_result();
+
+            if ($result_check_club->num_rows > 0) {
+                $club_message = "A club profile already exists for this user.";
+            } else {
+                // Prepara la query INSERT
+                $sql_insert_club = "INSERT INTO clubs (user_id, name, address, city, province, contact_name, contact_phone, affiliation_number)
+                                VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+                $stmt_insert_club = $conn->prepare($sql_insert_club);
+
+                if ($stmt_insert_club) {
+                    $stmt_insert_club->bind_param(
+                        "isssssss",
+                        $user_id,
+                        $name,
+                        $address,
+                        $city,
+                        $province,
+                        $contact_name,
+                        $contact_phone,
+                        $affiliation_number
+                    );
+
+                    if ($stmt_insert_club->execute()) {
+                        $club_message = "Club profile created successfully!";
+                        header("Location: profile.php?status=club_created");
+                        exit;
+                    } else {
+                        $club_message = "Error creating club profile";
+                    }
+                    $stmt_insert_club->close();
+                } else {
+                    $club_message = "Database error: Unable to prepare statement for club creation.";
+                }
+            }
+            $stmt_check_club->close();
+        }
+    }
+}
+elseif ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_club_profile'])) {
+    if (!$user_has_role_club || !isset($club)) {
+        $club_message = "You do not have permission to update a club profile or no profile exists.";
+    } else {
+        $name = trim($_POST['name'] ?? '');
+        $address = trim($_POST['address'] ?? '');
+        $city = trim($_POST['city'] ?? '');
+        $province = trim($_POST['province'] ?? '');
+        $contact_name = trim($_POST['contact_name'] ?? '');
+        $contact_phone = trim($_POST['contact_phone'] ?? '');
+        $affiliation_number = trim($_POST['affiliation_number'] ?? '');
+
+        if (empty($name)) {
+            $club_message = "Club Name is required.";
+        } else {
+            $sql_update_club = "UPDATE clubs SET
+                                name = ?,
+                                address = ?,
+                                city = ?,
+                                province = ?,
+                                contact_name = ?,
+                                contact_phone = ?,
+                                affiliation_number = ?
+                                WHERE user_id = ?";
+
+            $stmt_update_club = $conn->prepare($sql_update_club);
+
+            if ($stmt_update_club) {
+                $stmt_update_club->bind_param(
+                    "sssssssi",
+                    $name,
+                    $address,
+                    $city,
+                    $province,
+                    $contact_name,
+                    $contact_phone,
+                    $affiliation_number,
+                    $user_id
+                );
+
+                if ($stmt_update_club->execute()) {
+                    $club_message = "Club profile updated successfully!";
+                    header("Location: profile.php?status=club_updated");
+                    exit;
+                } else {
+                    $club_message = "Error updating club profile: " . $stmt_update_club->error;
+                }
+                $stmt_update_club->close();
+            } else {
+                $club_message = "Database error: Unable to prepare statement for club update.";
+            }
+        }
+    }
+}
+
+if (isset($_GET['status'])) {
+    if ($_GET['status'] == 'club_created') {
+        $club_message = "Club profile created successfully!";
+    } elseif ($_GET['status'] == 'club_error') {
+        $club_message = "An error occurred while creating the club profile.";
+    }
+}
+
 $smarty->assign('password_change_message', $password_change_message);
+$smarty->assign('club_message', $club_message);
 
 $smarty->assign('title', 'Profile');
 $smarty->display('profile.tpl.html');
