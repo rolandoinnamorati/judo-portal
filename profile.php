@@ -93,7 +93,6 @@ elseif ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['create_club_profil
             if ($result_check_club->num_rows > 0) {
                 $club_message = "A club profile already exists for this user.";
             } else {
-                // Prepara la query INSERT
                 $sql_insert_club = "INSERT INTO clubs (user_id, name, address, city, province, contact_name, contact_phone, affiliation_number)
                                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 

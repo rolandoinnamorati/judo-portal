@@ -31,14 +31,11 @@
     gap: 1.5rem;
 }
 
-/* New CSS for Username */
 .header-right .username {
     color: #fff;
-    margin-right: 1rem; /* Adjust spacing as needed */
+    margin-right: 1rem;
 }
 
-
-/* Notifiche */
 .notification-icon {
     position: relative;
     font-size: 1.2rem;
@@ -99,7 +96,6 @@
     color: #fff;
 }
 
-/* Mostra dropdown quando si passa su tutta l’area menu */
 .profile-menu:hover .dropdown {
     display: block;
 }

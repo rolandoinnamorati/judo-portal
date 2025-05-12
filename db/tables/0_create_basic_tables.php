@@ -6,8 +6,6 @@ if (!($conn = db_open(DB_HOST, DB_USER, DB_PASS, DB_NAME))) {
     die("Database connection failed: " . mysqli_connect_error());
 }
 
-
-// 1. Create Modules Table
 executeQuery($conn, "CREATE TABLE IF NOT EXISTS modules (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL UNIQUE,
@@ -17,7 +15,6 @@ executeQuery($conn, "CREATE TABLE IF NOT EXISTS modules (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )");
 
-// 2. Create Environments Table
 executeQuery($conn, "CREATE TABLE IF NOT EXISTS environments (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL UNIQUE,
@@ -29,7 +26,6 @@ executeQuery($conn, "CREATE TABLE IF NOT EXISTS environments (
     FOREIGN KEY (module_id) REFERENCES modules(id) ON DELETE CASCADE
 )");
 
-// 3. Create Roles Table
 executeQuery($conn, "CREATE TABLE IF NOT EXISTS roles (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL UNIQUE,
@@ -37,7 +33,6 @@ executeQuery($conn, "CREATE TABLE IF NOT EXISTS roles (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )");
 
-// 4. Create Permissions Table
 executeQuery($conn, "CREATE TABLE IF NOT EXISTS permissions (
     id INT AUTO_INCREMENT PRIMARY KEY,
     operation INT NOT NULL,
@@ -49,7 +44,6 @@ executeQuery($conn, "CREATE TABLE IF NOT EXISTS permissions (
     FOREIGN KEY (environment_id) REFERENCES environments(id) ON DELETE CASCADE
 )");
 
-// 5. Create Users Table
 executeQuery($conn, "CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(255) NOT NULL UNIQUE,
@@ -59,7 +53,6 @@ executeQuery($conn, "CREATE TABLE IF NOT EXISTS users (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )");
 
-// 6. Create User Has Roles Table
 executeQuery($conn, "CREATE TABLE IF NOT EXISTS user_has_roles (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,

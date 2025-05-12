@@ -6,13 +6,11 @@ if (!($conn = db_open(DB_HOST, DB_USER, DB_PASS, DB_NAME))) {
     die("Database connection failed: " . mysqli_connect_error());
 }
 
-// 1. Insert Modules
 executeQuery($conn, "INSERT INTO modules (name, icon) VALUES
     ('Base','fas fa-tachometer-alt'),
     ('Utenti','fas fa-users'),
     ('Atleti','fas fa-user-friends')");
 
-// 2. Insert Environments
 executeQuery($conn, "INSERT INTO environments (name, module_id, url) VALUES
     ('Dashboard', 1, 'dashboard.php'),
     ('Utenti', 2, 'users.php'),
@@ -20,12 +18,10 @@ executeQuery($conn, "INSERT INTO environments (name, module_id, url) VALUES
     ('Atleti', 3, 'athletes.php'),
     ('Profilo', 1, 'profile.php')");
 
-// 3. Insert Roles
 executeQuery($conn, "INSERT INTO roles (name) VALUES
     ('Admin'),
     ('Club')");
 
-// 4. Insert Permissions
 executeQuery($conn, "INSERT INTO permissions (operation, role_id, environment_id) VALUES
     (" . OPERATION_READ . ", 1, 1), (" . OPERATION_CREATE . ", 1, 1), (" . OPERATION_UPDATE . ", 1, 1), (" . OPERATION_DELETE . ", 1, 1),
     (" . OPERATION_READ . ", 1, 2), (" . OPERATION_CREATE . ", 1, 2), (" . OPERATION_UPDATE . ", 1, 2), (" . OPERATION_DELETE . ", 1, 2),
@@ -37,7 +33,6 @@ executeQuery($conn, "INSERT INTO permissions (operation, role_id, environment_id
     (" . OPERATION_READ . ", 1, 7), (" . OPERATION_CREATE . ", 1, 7), (" . OPERATION_UPDATE . ", 1, 7), (" . OPERATION_DELETE . ", 1, 7)
 ");
 
-// 5. Insert Admin User
 $email = "admin@email.it";
 $password = "admin";
 $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
@@ -53,7 +48,6 @@ if (!$stmt->execute()) {
 $admin_user_id = $conn->insert_id;
 $stmt->close();
 
-// 6. Assign Admin Role to Admin User
 $stmt = $conn->prepare("SELECT id FROM roles WHERE name = 'Admin'");
 if (!$stmt) {
     die("Prepare failed: " . $conn->error);

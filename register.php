@@ -4,10 +4,10 @@ require "inc/db.inc.php";
 require_once('libs/smarty/Smarty.class.php');
 
 $smarty = new \Smarty\Smarty();
-$smarty->setTemplateDir('tpl/');      // Template directory
-$smarty->setCompileDir('tpl_c/');  // Compile directory
-$smarty->setConfigDir('configs/');  // Config directory (optional)
-$smarty->setCacheDir('cache/');      // Cache directory (optional)
+$smarty->setTemplateDir('tpl/');
+$smarty->setCompileDir('tpl_c/');
+$smarty->setConfigDir('configs/');
+$smarty->setCacheDir('cache/');
 
 define("LANDING_PAGE", "dashboard.php");
 
@@ -20,7 +20,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
     exit;
 }
 
-$reg_name_err = $reg_email_err = $reg_password_err = $register_err = ""; // Initialize error variables
+$reg_name_err = $reg_email_err = $reg_password_err = $register_err = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = trim($_POST['name'] ?? '');
@@ -76,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute();
             $result = $stmt->get_result();
             if ($result->num_rows == 0) {
-                $register_err = "Errore: Ruolo 'Club' non trovato."; // More specific error
+                $register_err = "Errore: Ruolo 'Club' non trovato.";
             } else {
                 $row = $result->fetch_assoc();
                 $club_role_id = $row['id'];
@@ -105,7 +105,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Assign variables to Smarty
 $smarty->assign('name', $name ?? '');
 $smarty->assign('email', $email ?? '');
 $smarty->assign('reg_name_err', $reg_name_err);

@@ -42,7 +42,6 @@ if (!move_uploaded_file($_FILES['profile_image']['tmp_name'], $destination)) {
     exit;
 }
 
-// Update the database
 $sql = "UPDATE users SET profile_image = ? WHERE id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("si", $newFileName, $user_id);

@@ -175,7 +175,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete_roles'])) {
     $role_ids = $_POST['role_ids'];
 
     if (!empty($role_ids)) {
-        // Controlla se ci sono utenti collegati ai ruoli da eliminare
         $placeholders = implode(',', array_fill(0, count($role_ids), '?'));
         $sql_check_users = "SELECT COUNT(*) FROM user_has_roles WHERE role_id IN ($placeholders)";
         $stmt_check_users = $conn->prepare($sql_check_users);
@@ -190,7 +189,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete_roles'])) {
             exit();
         }
 
-        // Se non ci sono utenti collegati, procedi con l'eliminazione dei permessi e dei ruoli
         $conn->begin_transaction();
 
         $sql_delete_permissions = "DELETE FROM permissions WHERE role_id IN ($placeholders)";

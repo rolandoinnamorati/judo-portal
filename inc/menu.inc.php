@@ -25,7 +25,7 @@ if (!empty($roles)) {
     $stmt = $conn->prepare("SELECT DISTINCT environment_id FROM permissions WHERE role_id IN ($placeholders)");
     if (!$stmt) error(500);
 
-    $stmt->bind_param(str_repeat('i', count($role_ids)), ...$role_ids); // Bind parameters dynamically
+    $stmt->bind_param(str_repeat('i', count($role_ids)), ...$role_ids);
     $stmt->execute();
     $result = $stmt->get_result();
     $allowed_environments = $result->fetch_all(MYSQLI_ASSOC);
@@ -82,7 +82,7 @@ $user = $result->fetch_assoc();
 if ($user) {
     $profile_image = $user['profile_image'];
 } else {
-    $profile_image = null; // Or a default image filename
+    $profile_image = null;
 }
 
 $smarty->assign('profile_image', $profile_image);

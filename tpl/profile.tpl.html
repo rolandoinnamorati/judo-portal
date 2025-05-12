@@ -198,7 +198,6 @@
                 if (data.success) {
                     messageDiv.textContent = data.message;
                     messageDiv.className = 'alert alert-success small mt-2';
-                    // Optionally update the displayed image:
                     document.querySelector('.img-fluid.rounded-circle').src = 'uploads/' + data.filename;
                 } else {
                     messageDiv.textContent = data.message;
