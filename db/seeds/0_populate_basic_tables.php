@@ -15,9 +15,9 @@ executeQuery($conn, "INSERT INTO modules (name, icon) VALUES
 // 2. Insert Environments
 executeQuery($conn, "INSERT INTO environments (name, module_id, url) VALUES
     ('Dashboard', 1, 'dashboard.php'),
-    ('Utenti', 2, 'users/list.php'),
-    ('Ruoli', 2, 'roles/list.php'),
-    ('Atleti', 3, 'athletes/list.php'),
+    ('Utenti', 2, 'users.php'),
+    ('Ruoli', 2, 'roles.php'),
+    ('Atleti', 3, 'athletes.php'),
     ('Profilo', 1, 'profile.php')");
 
 // 3. Insert Roles

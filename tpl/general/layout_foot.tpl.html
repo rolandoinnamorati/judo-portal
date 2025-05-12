@@ -2,5 +2,22 @@
 </section>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs5/dt-1.13.10/datatables.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        if("{$smarty.get.message}" && "{$smarty.get.status}" == "error") {
+            toastr.error("{$smarty.get.message}", { timeOut: 1000 });
+        }
+        else if("{$smarty.get.message}" && "{$smarty.get.status}" == "success") {
+            toastr.success("{$smarty.get.message}", { timeOut: 1000 });
+        }
+        else if("{$smarty.get.message}") {
+            toastr.info("{$smarty.get.message}", { timeOut: 1000 });
+        }
+    });
+</script>
+
 </body>
 </html>
