@@ -35,7 +35,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $password = trim($_POST["password"]);
     }
 
-    if (!($stmt = $conn->prepare("SELECT * FROM users WHERE email=?"))) {
+    if (!($stmt = $conn->prepare("SELECT * FROM users WHERE email=? AND active=1"))) {
         error(500);
     }
 

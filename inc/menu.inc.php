@@ -86,3 +86,54 @@ if ($user) {
 }
 
 $smarty->assign('profile_image', $profile_image);
+
+function userHasPermission($environment, $operation) {
+    global $conn;
+
+    $user_id = $_SESSION['user_id'];
+
+    $sql_env = "SELECT id FROM environments WHERE name = ?";
+    $stmt_env = $conn->prepare($sql_env);
+    $stmt_env->bind_param("s", $environment);
+    $stmt_env->execute();
+    $result_env = $stmt_env->get_result();
+
+    if ($result_env->num_rows == 0) {
+        return false; //  Environment doesn't exist
+    }
+
+    $environment_id = $result_env->fetch_assoc()['id'];
+    $stmt_env->close();
+
+    $sql_user_roles = "SELECT role_id FROM user_has_roles WHERE user_id = ?";
+    $stmt_user_roles = $conn->prepare($sql_user_roles);
+    $stmt_user_roles->bind_param("i", $user_id);
+    $stmt_user_roles->execute();
+    $result_user_roles = $stmt_user_roles->get_result();
+
+    $role_ids = [];
+    while ($row_user_roles = $result_user_roles->fetch_assoc()) {
+        $role_ids[] = $row_user_roles['role_id'];
+    }
+    $stmt_user_roles->close();
+
+    if (empty($role_ids)) {
+        return false; //  User has no roles, so no permission
+    }
+
+    $placeholders = implode(',', array_fill(0, count($role_ids), '?'));
+
+    $sql_perm = "SELECT COUNT(*) FROM permissions 
+                 WHERE environment_id = ? AND operation = ? AND role_id IN ($placeholders)";
+    $stmt_perm = $conn->prepare($sql_perm);
+
+    $types = 'ii' . str_repeat('i', count($role_ids));
+
+    $stmt_perm->bind_param($types, $environment_id, $operation, ...$role_ids);
+    $stmt_perm->execute();
+    $result_perm = $stmt_perm->get_result();
+    $has_permission = ($result_perm->fetch_row()[0] > 0);
+    $stmt_perm->close();
+
+    return $has_permission;
+}

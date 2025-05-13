@@ -1,6 +1,11 @@
 <?php
 require "inc/menu.inc.php";
 
+if (!userHasPermission('Ruoli', OPERATION_READ)) {
+    error(403);
+    exit();
+}
+
 if ($_SERVER['REQUEST_METHOD'] == 'GET' && !isset($_GET['action']) && !isset($_GET['id'])) {
     $sql = "SELECT r.id, r.name, COUNT(p.id) AS permissions_count 
             FROM roles r
@@ -34,6 +39,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && !isset($_GET['action']) && !isset($_G
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['create_role'])) {
+    if (!userHasPermission('Ruoli', OPERATION_CREATE)) {
+        error(403);
+        exit();
+    }
     $name = trim($_POST['name']);
     $permissions = $_POST['permissions'] ?? [];
 
@@ -118,8 +127,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['id'])) {
     }
 }
 
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_role'])) {
+    if (!userHasPermission('Ruoli', OPERATION_UPDATE)) {
+        error(403);
+        exit();
+    }
     $id = $_POST['id'];
     $name = trim($_POST['name']);
     $permissions = $_POST['permissions'] ?? [];
@@ -170,6 +182,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_role'])) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete_roles'])) {
+    if (!userHasPermission('Ruoli', OPERATION_DELETE)) {
+        error(403);
+        exit();
+    }
     $role_ids = $_POST['role_ids'];
 
     if (!empty($role_ids)) {

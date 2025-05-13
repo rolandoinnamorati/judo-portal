@@ -11,6 +11,9 @@ function error($code){
         case 405:
             $msg = "Method Not Allowed";
             break;
+        case 403:
+            $msg = "Forbidden";
+            break;
         default:
             $msg = "Unknown Error";
     }
