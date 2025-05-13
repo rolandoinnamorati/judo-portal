@@ -81,11 +81,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['create_role'])) {
     }
 }
 
-
-
 if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['id'])) {
     $id = $_GET['id'];
-    $sql = "SELECT r.id, r.name, p.environment_id, p.operation
+    $sql = "SELECT r.id AS role_id, r.name, p.environment_id, p.operation, p.id AS permission_id
             FROM roles r
             LEFT JOIN permissions p ON r.id = p.role_id
             WHERE r.id = ?";
@@ -95,9 +93,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['id'])) {
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
-        $role = $result->fetch_assoc();
-        $role['role_id'] = $id;
+
         $permissions = [];
+
         while($row = $result->fetch_assoc()){
             $permissions[] = $row;
         }

@@ -1,4 +1,5 @@
 <?php
+require $_SERVER['DOCUMENT_ROOT'] . "/inc/errors.inc.php";
 
 if(!isset($_SERVER['DOCUMENT_ROOT']))
     $_SERVER['DOCUMENT_ROOT'] = dirname(__FILE__, 2);
@@ -10,14 +11,12 @@ if (!defined("_DB_INC_")) {
     define("DB_HOST", "");
     define("DB_USER", "");
     define("DB_PASS", "");
-    define("DB_NAME", "DELTAMAP");
-
-    require_once $_SERVER['DOCUMENT_ROOT'].'/bootstrap.php';
+    define("DB_NAME", "");
 
     function db_open($host, $user, $pass, $db)
     {
-        if (($db_conn = new mysqli($host, $user, $pass, $db)) === FALSE) {
-            return false;
+        if (($db_conn = new mysqli($host, $user, $pass, $db)) == FALSE) {
+            error(500);
         }
 
         return $db_conn;
@@ -31,5 +30,11 @@ if (!defined("_DB_INC_")) {
     function db_get_error($format = 'HTML')
     {
         return "Errore durante il recupero della risorsa richiesta";
+    }
+
+    function executeQuery($conn, $sql) {
+        if (!mysqli_query($conn, $sql)) {
+            die("SQL Error: " . mysqli_error($conn) . "\nSQL: " . $sql);
+        }
     }
 }
