@@ -1,0 +1,314 @@
+{include file='general/layout_head.tpl.html'}
+
+<div class="container mx-0">
+    <div class="row justify-content-center">
+        <div class="col-lg-12 mb-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body py-3 px-3">
+                    <h4 class="mb-0">{$title}</h4>
+
+                    {if $mode == 'list'}
+                    <div class="mb-0">
+                        <button type="button" class="btn btn-primary btn-sm my-1" data-bs-toggle="modal" data-bs-target="#createAthleteModal">
+                            <i class="fas fa-plus"></i> Create Athlete
+                        </button>
+                        <form method="post" action="athletes.php" style="display:inline-block;" id="delete-athletes-form">
+                            <input type="hidden" name="delete_athletes" value="1">
+                            <button id="delete-selected" type="submit" class="btn btn-danger btn-sm ml-2" disabled>
+                                <i class="fas fa-trash"></i> Delete Selected
+                            </button>
+                        </form>
+                    </div>
+
+                    {if $success_message}
+                    <div class="alert alert-success">{$success_message}</div>
+                    {/if}
+                    {if $error_message}
+                    <div class="alert alert-danger">{$error_message}</div>
+                    {/if}
+
+                    <table id="athletes-table" class="table table-striped table-bordered" style="width:100%;">
+                        <thead>
+                        <tr>
+                            <th><input type="checkbox" id="select-all"></th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Date of Birth</th>
+                            <th>Gender</th>
+                            <th>Weight</th>
+                            <th>Active</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody class="dt-scrollable">
+                        {foreach from=$athletes item=athlete}
+                        <tr>
+                            <td><input type="checkbox" class="athlete-checkbox" name="athlete_ids[]" value="{$athlete.id}"></td>
+                            <td>{$athlete.first_name}</td>
+                            <td>{$athlete.last_name}</td>
+                            <td>{$athlete.date_of_birth}</td>
+                            <td>{$athlete.gender}</td>
+                            <td>{$athlete.weight}</td>
+                            <td>{$athlete.active}</td>
+                            <td>
+                                <button type="button" class="btn btn-sm btn-secondary my-0 edit-athlete-button" data-bs-toggle="modal" data-bs-target="#editAthleteModal"
+                                        data-athlete-id="{$athlete.id}"
+                                        data-first-name="{$athlete.first_name|escape}"
+                                        data-last-name="{$athlete.last_name|escape}"
+                                        data-date-of-birth="{$athlete.date_of_birth}"
+                                        data-gender="{$athlete.gender}"
+                                        data-weight="{$athlete.weight}"
+                                        data-active="{$athlete.active}"
+                                        data-affiliation-number="{$athlete.affiliation_number|escape}"
+                                        data-medical-certificate-expiry-date="{$athlete.medical_certificate_expiry_date}"
+                                        data-notes="{$athlete.notes|escape}">
+                                    <i class="fas fa-eye"></i> Show
+                                </button>
+                            </td>
+                        </tr>
+                        {/foreach}
+                        </tbody>
+                    </table>
+                    {/if}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="createAthleteModal" tabindex="-1" aria-labelledby="createAthleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createAthleteModalLabel">Create Athlete</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="athletes.php" method="POST">
+                <div class="modal-body">
+                    <input type="hidden" name="create_athlete" value="1">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="first_name" class="form-label">First Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="first_name" name="first_name" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="last_name" class="form-label">Last Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="last_name" name="last_name" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="date_of_birth" class="form-label">Date of Birth <span class="text-danger">*</span></label>
+                            <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="gender" class="form-label">Gender <span class="text-danger">*</span></label>
+                            <select class="form-select" id="gender" name="gender" required>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="weight" class="form-label">Weight (kg) <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control" id="weight" name="weight" step="0.01" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="active" class="form-label">Active</label>
+                            <select class="form-select" id="active" name="active">
+                                <option value="1" selected>Yes</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="kyu" class="form-label">Kyu</label>
+                            <input type="number" class="form-control" id="kyu" name="kyu" min="1">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="dan" class="form-label">Dan</label>
+                            <input type="number" class="form-control" id="dan" name="dan" min="1">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="affiliation_number" class="form-label">Affiliation Number</label>
+                        <input type="text" class="form-control" id="affiliation_number" name="affiliation_number">
+                    </div>
+                    <div class="mb-3">
+                        <label for="medical_certificate_expiry_date" class="form-label">Medical Certificate Expiry Date</label>
+                        <input type="date" class="form-control" id="medical_certificate_expiry_date" name="medical_certificate_expiry_date">
+                    </div>
+                    <div class="mb-3">
+                        <label for="notes" class="form-label">Notes</label>
+                        <textarea class="form-control" id="notes" name="notes" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editAthleteModal" tabindex="-1" aria-labelledby="editAthleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editAthleteModalLabel">Edit Athlete</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="athletes.php" method="POST">
+                <div class="modal-body">
+                    <input type="hidden" name="update_athlete" value="1">
+                    <input type="hidden" name="id" id="edit_athlete_id" value="">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="edit_first_name" class="form-label">First Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="edit_first_name" name="first_name" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="edit_last_name" class="form-label">Last Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="edit_last_name" name="last_name" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="edit_date_of_birth" class="form-label">Date of Birth <span class="text-danger">*</span></label>
+                            <input type="date" class="form-control" id="edit_date_of_birth" name="date_of_birth" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="edit_gender" class="form-label">Gender <span class="text-danger">*</span></label>
+                            <select class="form-select" id="edit_gender" name="gender" required>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="edit_weight" class="form-label">Weight (kg) <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control" id="edit_weight" name="weight" step="0.01" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="edit_active" class="form-label">Active</label>
+                            <select class="form-select" id="edit_active" name="active">
+                                <option value="1">Yes</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="edit_kyu" class="form-label">Kyu</label>
+                            <input type="number" class="form-control" id="edit_kyu" name="kyu" min="1">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="edit_dan" class="form-label">Dan</label>
+                            <input type="number" class="form-control" id="edit_dan" name="dan" min="1">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_affiliation_number" class="form-label">Affiliation Number</label>
+                        <input type="text" class="form-control" id="edit_affiliation_number" name="affiliation_number">
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_medical_certificate_expiry_date" class="form-label">Medical Certificate Expiry Date</label>
+                        <input type="date" class="form-control" id="edit_medical_certificate_expiry_date" name="medical_certificate_expiry_date">
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_notes" class="form-label">Notes</label>
+                        <textarea class="form-control" id="edit_notes" name="notes" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{include file='general/layout_foot.tpl.html'}
+
+<script>
+    $(document).ready(function() {
+        if ($('#athletes-table').length) {
+            var athletesTable = $('#athletes-table').DataTable({
+                "order": [[1, "asc"]],
+                "scrollY": "200px",
+                "scrollCollapse": true,
+                "paging": true,
+                "dom": 'rtip',
+            });
+            $('.dataTables_wrapper').css('overflow','visible');
+            $('.dataTables_scrollBody').css('overflow','auto');
+
+            $('#select-all').on('click', function() {
+                $('.athlete-checkbox').prop('checked', this.checked);
+                toggleDeleteButtonState();
+            });
+
+            $('.athlete-checkbox').on('change', function() {
+                toggleDeleteButtonState();
+                if ($('.athlete-checkbox:checked').length === $('.athlete-checkbox').length) {
+                    $('#select-all').prop('checked', true);
+                } else {
+                    $('#select-all').prop('checked', false);
+                }
+            });
+
+            function toggleDeleteButtonState() {
+                $('#delete-selected').prop('disabled', $('.athlete-checkbox:checked').length === 0);
+            }
+
+            $('#delete-selected').on('click', function(e) {
+                e.preventDefault();
+
+                var selectedAthleteIds = [];
+                $('.athlete-checkbox:checked').each(function() {
+                    selectedAthleteIds.push($(this).val());
+                });
+
+                if (selectedAthleteIds.length > 0) {
+                    var input = $('<input>')
+                        .attr('type', 'hidden')
+                        .attr('name', 'athlete_ids[]')
+                        .val(selectedAthleteIds);
+
+                    $('#delete-athletes-form').append(input).submit();
+                } else {
+                    alert('No athletes selected to delete.');
+                }
+            });
+
+            $('.edit-athlete-button').on('click', function() {
+                var athleteId = $(this).data('athlete-id');
+                var firstName = $(this).data('first-name');
+                var lastName = $(this).data('last-name');
+                var dateOfBirth = $(this).data('date-of-birth');
+                var gender = $(this).data('gender');
+                var weight = $(this).data('weight');
+                var active = $(this).data('active');
+                var affiliationNumber = $(this).data('affiliation-number');
+                var medicalCertificateExpiryDate = $(this).data('medical-certificate-expiry-date');
+                var notes = $(this).data('notes');
+
+                $('#edit_athlete_id').val(athleteId);
+                $('#edit_first_name').val(firstName);
+                $('#edit_last_name').val(lastName);
+                $('#edit_date_of_birth').val(dateOfBirth);
+                $('#edit_gender').val(gender);
+                $('#edit_weight').val(weight);
+                $('#edit_active').val(active);
+                $('#edit_affiliation_number').val(affiliationNumber);
+                $('#edit_medical_certificate_expiry_date').val(medicalCertificateExpiryDate);
+                $('#edit_notes').val(notes);
+            });
+        }
+    });
+</script>
