@@ -70,32 +70,4 @@
     border: 2px solid #4fc3f7;
 }
 
-.dropdown {
-    display: none;
-    position: absolute;
-    top: 110%;
-    right: 0;
-    background: #222;
-    border: 1px solid #333;
-    border-radius: 5px;
-    padding: 0.5rem 0;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.6);
-    z-index: 1000;
-}
-
-.dropdown a {
-    display: block;
-    padding: 0.5rem 1rem;
-    color: #ccc;
-    text-decoration: none;
-    white-space: nowrap;
-}
-
-.dropdown a:hover {
-    background: #444;
-    color: #fff;
-}
-
-.profile-menu:hover .dropdown {
-    display: block;
-}
+/* Rimosse le regole della dropdown, ora gestite da Bootstrap */

@@ -11,14 +11,14 @@
             </div>
             <div class="profile-menu">
                 {if $profile_image}
-                <img src="uploads/{$profile_image}" alt="Profile" class="avatar">
+                <img src="uploads/{$profile_image}" alt="Profile" class="avatar dropdown-toggle" data-bs-toggle="dropdown">
                 {else}
-                <img src="images/default_avatar.png" alt="Default Avatar" class="avatar">
+                <img src="images/default_avatar.png" alt="Default Avatar" class="avatar dropdown-toggle" data-bs-toggle="dropdown">
                 {/if}
-                <div class="dropdown">
-                    <a href="profile.php">Profilo</a>
-                    <a href="logout.php">Logout</a>
-                </div>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="profile.php">Profilo</a></li>
+                    <li><a class="dropdown-item" href="logout.php">Logout</a></li>
+                </ul>
             </div>
         </div>
     </div>
