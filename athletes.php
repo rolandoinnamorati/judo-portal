@@ -164,7 +164,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_athlete'])) {
     $medical_certificate_expiry_date = $_POST['medical_certificate_expiry_date'] ?? null;
     $notes = $_POST['notes'] ?? null;
 
-    if (empty($first_name) || empty($last_name) || empty($date_of_birth) || empty($gender) || empty($weight)) {
+    if (empty($first_name) || empty($last_name) || empty($date_of_birth) || empty($gender) || empty($weight) || empty($medical_certificate_expiry_date)) {
         $error_message = "All fields marked with (*) are required.";
         header("Location: /athletes.php?status=error&message=" . urlencode($error_message));
         exit();

@@ -1,6 +1,101 @@
 {include file='general/layout_head.tpl.html'}
 
-DASHBOARD
+<link href="css/dashboard.css" rel="stylesheet">
+<div class="container mt-4">
+    {if $user_role == 'Admin'}
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card dashboard-card">
+                <div class="card-body">
+                    <i class="fas fa-building fa-2x card-icon"></i>
+                    <h5 class="card-title">Total Clubs</h5>
+                    <p class="card-text">{$total_clubs}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card dashboard-card">
+                <div class="card-body">
+                    <i class="fas fa-users fa-2x card-icon"></i>
+                    <h5 class="card-title">Total Athletes</h5>
+                    <p class="card-text">{$total_athletes}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card dashboard-card">
+                <div class="card-body">
+                    <i class="fas fa-user-check fa-2x card-icon"></i>
+                    <h5 class="card-title">Active Athletes</h5>
+                    <p class="card-text">{$active_athletes}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {/if}
+
+    {if $user_role == 'Club'}
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card dashboard-card mt-4">
+                <div class="card-body">
+                    <i class="fas fa-chart-pie fa-2x card-icon"></i>
+                    <h5 class="card-title">My Athletes (Active/Inactive)</h5>
+                    <canvas id="athletesActiveChart" width="400" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card dashboard-card mt-4">
+                <div class="card-body">
+                    <i class="fas fa-chart-pie fa-2x card-icon"></i>
+                    <h5 class="card-title">My Athletes (Gender)</h5>
+                    <canvas id="athletesGenderChart" width="400" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    {/if}
+
+</div>
 
 {include file='general/layout_foot.tpl.html'}
 
+<script>
+    {if $user_role == 'Admin'}
+
+    {/if}
+
+    {if $user_role == 'Club'}
+        const athletesActive = JSON.parse('{$athletes_active}');
+        const athletesInactive = JSON.parse('{$athletes_inactive}');
+
+        const athletesActiveChart = new Chart(document.getElementById('athletesActiveChart'), {
+            type: 'pie',
+            data: {
+                labels: ['Active', 'Inactive'],
+                datasets: [{
+                    label: 'Athletes',
+                    data: [athletesActive, athletesInactive],
+                    backgroundColor: ['rgba(178, 222, 39, 0.6)', 'rgba(245, 39, 39, 0.6)']
+                }]
+            }
+        });
+
+        const athletesMan = JSON.parse('{$athletes_man}');
+        const athletesWoman = JSON.parse('{$athletes_women}');
+        const athletesGenderChart = new Chart(document.getElementById('athletesGenderChart'), {
+            type: 'pie',
+            data: {
+                labels: ['Man', 'Woman'],
+                datasets: [{
+                    label: 'Athletes',
+                    data: [athletesMan, athletesWoman],
+                    backgroundColor: ['rgba(15, 10, 222, 0.6)', 'rgba(255, 192, 203, 0.6)']
+                }]
+            }
+        });
+    {/if}
+</script>
