@@ -8,67 +8,78 @@
                     <h4 class="mb-0">{$title}</h4>
 
                     {if $mode == 'list'}
-                    <div class="mb-0">
-                        <button type="button" class="btn btn-primary btn-sm my-1" data-bs-toggle="modal" data-bs-target="#createAthleteModal">
-                            <i class="fas fa-plus"></i> Create Athlete
-                        </button>
-                        <form method="post" action="athletes.php" style="display:inline-block;" id="delete-athletes-form">
-                            <input type="hidden" name="delete_athletes" value="1">
-                            <button id="delete-selected" type="submit" class="btn btn-danger btn-sm ml-2" disabled>
-                                <i class="fas fa-trash"></i> Delete Selected
+                        {if !$club}
+                        <div class="mb-0">
+                            <button type="button" class="btn btn-primary btn-sm my-1" data-bs-toggle="modal" data-bs-target="#createAthleteModal">
+                                <i class="fas fa-plus"></i> Create Athlete
                             </button>
-                        </form>
-                    </div>
-
-                    {if $success_message}
-                    <div class="alert alert-success">{$success_message}</div>
-                    {/if}
-                    {if $error_message}
-                    <div class="alert alert-danger">{$error_message}</div>
-                    {/if}
-
-                    <table id="athletes-table" class="table table-striped table-bordered" style="width:100%;">
-                        <thead>
-                        <tr>
-                            <th><input type="checkbox" id="select-all"></th>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>Date of Birth</th>
-                            <th>Gender</th>
-                            <th>Weight</th>
-                            <th>Active</th>
-                            <th>Actions</th>
-                        </tr>
-                        </thead>
-                        <tbody class="dt-scrollable">
-                        {foreach from=$athletes item=athlete}
-                        <tr>
-                            <td><input type="checkbox" class="athlete-checkbox" name="athlete_ids[]" value="{$athlete.id}"></td>
-                            <td>{$athlete.first_name}</td>
-                            <td>{$athlete.last_name}</td>
-                            <td>{$athlete.date_of_birth}</td>
-                            <td>{$athlete.gender}</td>
-                            <td>{$athlete.weight}</td>
-                            <td>{$athlete.active}</td>
-                            <td>
-                                <button type="button" class="btn btn-sm btn-secondary my-0 edit-athlete-button" data-bs-toggle="modal" data-bs-target="#editAthleteModal"
-                                        data-athlete-id="{$athlete.id}"
-                                        data-first-name="{$athlete.first_name|escape}"
-                                        data-last-name="{$athlete.last_name|escape}"
-                                        data-date-of-birth="{$athlete.date_of_birth}"
-                                        data-gender="{$athlete.gender}"
-                                        data-weight="{$athlete.weight}"
-                                        data-active="{$athlete.active}"
-                                        data-affiliation-number="{$athlete.affiliation_number|escape}"
-                                        data-medical-certificate-expiry-date="{$athlete.medical_certificate_expiry_date}"
-                                        data-notes="{$athlete.notes|escape}">
-                                    <i class="fas fa-eye"></i> Show
+                            <form method="post" action="athletes.php" style="display:inline-block;" id="delete-athletes-form">
+                                <input type="hidden" name="delete_athletes" value="1">
+                                <button id="delete-selected" type="submit" class="btn btn-danger btn-sm ml-2" disabled>
+                                    <i class="fas fa-trash"></i> Delete Selected
                                 </button>
-                            </td>
-                        </tr>
-                        {/foreach}
-                        </tbody>
-                    </table>
+                            </form>
+                        </div>
+
+                        {if $success_message}
+                        <div class="alert alert-success">{$success_message}</div>
+                        {/if}
+                        {if $error_message}
+                        <div class="alert alert-danger">{$error_message}</div>
+                        {/if}
+
+                        <table id="athletes-table" class="table table-striped table-bordered" style="width:100%;">
+                            <thead>
+                            <tr>
+                                <th><input type="checkbox" id="select-all"></th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Date of Birth</th>
+                                <th>Gender</th>
+                                <th>Weight</th>
+                                <th>Active</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody class="dt-scrollable">
+                            {foreach from=$athletes item=athlete}
+                            <tr>
+                                <td><input type="checkbox" class="athlete-checkbox" name="athlete_ids[]" value="{$athlete.id}"></td>
+                                <td>{$athlete.first_name}</td>
+                                <td>{$athlete.last_name}</td>
+                                <td>{$athlete.date_of_birth}</td>
+                                <td>{$athlete.gender}</td>
+                                <td>{$athlete.weight}</td>
+                                <td>{$athlete.active}</td>
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-secondary my-0 edit-athlete-button" data-bs-toggle="modal" data-bs-target="#editAthleteModal"
+                                            data-athlete-id="{$athlete.id}"
+                                            data-first-name="{$athlete.first_name|escape}"
+                                            data-last-name="{$athlete.last_name|escape}"
+                                            data-date-of-birth="{$athlete.date_of_birth}"
+                                            data-gender="{$athlete.gender}"
+                                            data-weight="{$athlete.weight}"
+                                            data-active="{$athlete.active}"
+                                            data-kyu="{$athlete.kyu}"
+                                            data-dan="{$athlete.dan}"
+                                            data-affiliation-number="{$athlete.affiliation_number|escape}"
+                                            data-medical-certificate-expiry-date="{$athlete.medical_certificate_expiry_date}"
+                                            data-notes="{$athlete.notes|escape}">
+                                        <i class="fas fa-eye"></i> Show
+                                    </button>
+                                </td>
+                            </tr>
+                            {/foreach}
+                            </tbody>
+                        </table>
+                        {else}
+                        <div class="alert alert-info small text-center py-2" role="alert">
+                            No club information found. Please create your club profile.
+                        </div>
+                        <a class="btn btn-success btn-sm w-100" href="profile.php">
+                            Create Club Profile
+                        </a>
+                        {/if}
                     {/if}
                 </div>
             </div>
@@ -294,6 +305,8 @@
                 var gender = $(this).data('gender');
                 var weight = $(this).data('weight');
                 var active = $(this).data('active');
+                var kyu = $(this).data('kyu');
+                var dan = $(this).data('dan');
                 var affiliationNumber = $(this).data('affiliation-number');
                 var medicalCertificateExpiryDate = $(this).data('medical-certificate-expiry-date');
                 var notes = $(this).data('notes');
@@ -305,6 +318,8 @@
                 $('#edit_gender').val(gender);
                 $('#edit_weight').val(weight);
                 $('#edit_active').val(active);
+                $('#edit_kyu').val(kyu);
+                $('#edit_dan').val(dan);
                 $('#edit_affiliation_number').val(affiliationNumber);
                 $('#edit_medical_certificate_expiry_date').val(medicalCertificateExpiryDate);
                 $('#edit_notes').val(notes);

@@ -7,6 +7,24 @@ if (!userHasPermission('Atleti', OPERATION_READ)) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET' && !isset($_GET['action']) && !isset($_GET['id'])) {
+    $user_id = $_SESSION['user_id'];
+    $sql_club = "SELECT id FROM clubs WHERE user_id = ?";
+    $stmt_club = $conn->prepare($sql_club);
+    $stmt_club->bind_param("i", $user_id);
+    $stmt_club->execute();
+    $result_club = $stmt_club->get_result();
+
+    if ($result_club->num_rows == 0) {
+        $smarty->assign('club', true);
+        $smarty->assign('mode', 'list');
+        $smarty->assign('title', 'Athletes List');
+        $smarty->display('athletes.tpl.html');
+        exit();
+    }
+
+    $club_row = $result_club->fetch_assoc();
+    $club_id = $club_row['id'];
+
     $sql = "SELECT 
                 a.id,
                 a.first_name,
@@ -22,8 +40,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && !isset($_GET['action']) && !isset($_G
                 a.medical_certificate_expiry_date,
                 a.notes
             FROM athletes a
-            LEFT JOIN clubs c ON a.club_id = c.id";
-    $result = $conn->query($sql);
+            LEFT JOIN clubs c ON a.club_id = c.id
+            WHERE a.club_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $club_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
     $athletes = [];
     if ($result->num_rows > 0) {
@@ -53,7 +75,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['create_athlete'])) {
     $active = $_POST['active'] ?? 1;
     $kyu = $_POST['kyu'] ?? null;
     $dan = $_POST['dan'] ?? null;
-    $club_id = null; //TODO take automatically from the logged in user
+    $club_id = null;
+    $user_id = $_SESSION['user_id'];
+    // Fetch the club_id associated with the user_id
+    $sql_club = "SELECT id FROM clubs WHERE user_id = ?";
+    $stmt_club = $conn->prepare($sql_club);
+    $stmt_club->bind_param("i", $user_id);
+    $stmt_club->execute();
+    $result_club = $stmt_club->get_result();
+
+    if ($result_club->num_rows == 0) {
+        $error_message = "Club not found for the logged-in user.";
+        header("Location: /athletes.php?status=error&message=" . urlencode($error_message));
+        exit();
+    }
+
+    $club_row = $result_club->fetch_assoc();
+    $club_id = $club_row['id'];
     $affiliation_number = $_POST['affiliation_number'] ?? null;
     $medical_certificate_expiry_date = $_POST['medical_certificate_expiry_date'] ?? null;
     $notes = $_POST['notes'] ?? null;
@@ -122,12 +160,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_athlete'])) {
     $active = $_POST['active'] ?? 1;
     $kyu = $_POST['kyu'] ?? null;
     $dan = $_POST['dan'] ?? null;
-    $club_id = $_POST['club_id'];
     $affiliation_number = $_POST['affiliation_number'] ?? null;
     $medical_certificate_expiry_date = $_POST['medical_certificate_expiry_date'] ?? null;
     $notes = $_POST['notes'] ?? null;
 
-    if (empty($first_name) || empty($last_name) || empty($date_of_birth) || empty($gender) || empty($weight) || empty($club_id)) {
+    if (empty($first_name) || empty($last_name) || empty($date_of_birth) || empty($gender) || empty($weight)) {
         $error_message = "All fields marked with (*) are required.";
         header("Location: /athletes.php?status=error&message=" . urlencode($error_message));
         exit();
@@ -135,14 +172,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_athlete'])) {
 
     $sql = "UPDATE athletes SET
                 first_name = ?, last_name = ?, date_of_birth = ?, gender = ?, weight = ?, 
-                active = ?, kyu = ?, dan = ?, club_id = ?, affiliation_number = ?, 
+                active = ?, kyu = ?, dan = ?, affiliation_number = ?, 
                 medical_certificate_expiry_date = ?, notes = ?
             WHERE id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param(
-        "ssssdiiiisssi",
+        "ssssdiiisssi",
         $first_name, $last_name, $date_of_birth, $gender, $weight, $active, $kyu, $dan,
-        $club_id, $affiliation_number, $medical_certificate_expiry_date, $notes, $id
+        $affiliation_number, $medical_certificate_expiry_date, $notes, $id
     );
 
     if ($stmt->execute()) {
