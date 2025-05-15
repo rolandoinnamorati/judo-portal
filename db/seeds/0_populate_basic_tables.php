@@ -27,10 +27,7 @@ executeQuery($conn, "INSERT INTO permissions (operation, role_id, environment_id
     (" . OPERATION_READ . ", 1, 2), (" . OPERATION_CREATE . ", 1, 2), (" . OPERATION_UPDATE . ", 1, 2), (" . OPERATION_DELETE . ", 1, 2),
     (" . OPERATION_READ . ", 1, 3), (" . OPERATION_CREATE . ", 1, 3), (" . OPERATION_UPDATE . ", 1, 3), (" . OPERATION_DELETE . ", 1, 3),
     (" . OPERATION_READ . ", 2, 1), (" . OPERATION_CREATE . ", 2, 1), (" . OPERATION_UPDATE . ", 2, 1), (" . OPERATION_DELETE . ", 2, 1),
-    (" . OPERATION_READ . ", 2, 4), (" . OPERATION_CREATE . ", 2, 4), (" . OPERATION_UPDATE . ", 2, 4), (" . OPERATION_DELETE . ", 2, 4),
-    (" . OPERATION_READ . ", 2, 5), (" . OPERATION_CREATE . ", 2, 5), (" . OPERATION_UPDATE . ", 2, 5), (" . OPERATION_DELETE . ", 2, 5),
-    (" . OPERATION_READ . ", 1, 6), (" . OPERATION_CREATE . ", 1, 6), (" . OPERATION_UPDATE . ", 1, 6), (" . OPERATION_DELETE . ", 1, 6),
-    (" . OPERATION_READ . ", 1, 7), (" . OPERATION_CREATE . ", 1, 7), (" . OPERATION_UPDATE . ", 1, 7), (" . OPERATION_DELETE . ", 1, 7)
+    (" . OPERATION_READ . ", 2, 4), (" . OPERATION_CREATE . ", 2, 4), (" . OPERATION_UPDATE . ", 2, 4), (" . OPERATION_DELETE . ", 2, 4)
 ");
 
 $email = "admin@email.it";
