@@ -1,13 +1,15 @@
 <div class="sidebar">
     <ul class="menu">
         {foreach from=$modules item=module}
-        <li class="menu-item">
+        <li class="menu-item {if $active_module == $module.id}open{/if}">
             <a href="{$module.url}" class="menu-link">
                 <i class="{$module.icon}"></i><span>{$module.name}</span><i class="fas fa-chevron-down chevron"></i>
             </a>
             <ul class="submenu">
                 {foreach from=$module.environments item=environment}
-                <li><a href="{$environment.url}" class="sub-item">{$environment.name}</a></li>
+                <li {if $active_environment == $environment.id}class="active"{/if}>
+                    <a href="{$environment.url}" class="sub-item">{$environment.name}</a>
+                </li>
                 {/foreach}
             </ul>
         </li>

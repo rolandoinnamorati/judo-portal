@@ -98,3 +98,25 @@
 .menu-item.open .chevron {
     transform: rotate(180deg);
 }
+
+.menu-item.active > .menu-link {
+    background-color: #007bff; /* Un blu acceso */
+    color: white;
+}
+
+.menu-item.active > .menu-link:hover {
+    background-color: #0056b3; /* Un blu più scuro all'hover */
+}
+
+.menu-item.active .chevron {
+    color: white; /* Assicurati che anche la freccia sia bianca */
+}
+
+.submenu li.active a {
+    background-color: #007bff;
+    color: white;
+}
+
+.submenu li.active a:hover {
+    background-color: #0056b3;
+}

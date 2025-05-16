@@ -87,6 +87,24 @@ if ($user) {
 
 $smarty->assign('profile_image', $profile_image);
 
+$current_uri = strtok(substr($_SERVER['REQUEST_URI'], 1), '?');
+
+$active_module = null;
+$active_environment = null;
+
+foreach ($filtered_modules as $key => $module) {
+    foreach ($module['environments'] as $env_key => $environment) {
+        if ($environment['url'] == $current_uri) {
+            $active_module = $module['id'];
+            $active_environment = $environment['id'];
+            break 2;
+        }
+    }
+}
+
+$smarty->assign('active_module', $active_module);
+$smarty->assign('active_environment', $active_environment);
+
 function userHasPermission($environment, $operation) {
     global $conn;
 
@@ -99,7 +117,7 @@ function userHasPermission($environment, $operation) {
     $result_env = $stmt_env->get_result();
 
     if ($result_env->num_rows == 0) {
-        return false; //  Environment doesn't exist
+        return false; // Environment not found
     }
 
     $environment_id = $result_env->fetch_assoc()['id'];
