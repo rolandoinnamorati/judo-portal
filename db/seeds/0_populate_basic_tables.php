@@ -16,7 +16,8 @@ executeQuery($conn, "INSERT INTO environments (name, module_id, url) VALUES
     ('Utenti', 2, 'users.php'),
     ('Ruoli', 2, 'roles.php'),
     ('Atleti', 3, 'athletes.php'),
-    ('Profilo', 1, 'profile.php')");
+    ('Profilo', 1, 'profile.php'),
+    ('Iscrizioni', 3, 'registrations.php')");
 
 executeQuery($conn, "INSERT INTO roles (name) VALUES
     ('Admin'),
@@ -27,7 +28,8 @@ executeQuery($conn, "INSERT INTO permissions (operation, role_id, environment_id
     (" . OPERATION_READ . ", 1, 2), (" . OPERATION_CREATE . ", 1, 2), (" . OPERATION_UPDATE . ", 1, 2), (" . OPERATION_DELETE . ", 1, 2),
     (" . OPERATION_READ . ", 1, 3), (" . OPERATION_CREATE . ", 1, 3), (" . OPERATION_UPDATE . ", 1, 3), (" . OPERATION_DELETE . ", 1, 3),
     (" . OPERATION_READ . ", 2, 1), (" . OPERATION_CREATE . ", 2, 1), (" . OPERATION_UPDATE . ", 2, 1), (" . OPERATION_DELETE . ", 2, 1),
-    (" . OPERATION_READ . ", 2, 4), (" . OPERATION_CREATE . ", 2, 4), (" . OPERATION_UPDATE . ", 2, 4), (" . OPERATION_DELETE . ", 2, 4)
+    (" . OPERATION_READ . ", 2, 4), (" . OPERATION_CREATE . ", 2, 4), (" . OPERATION_UPDATE . ", 2, 4), (" . OPERATION_DELETE . ", 2, 4),
+    (" . OPERATION_READ . ", 2, 5), (" . OPERATION_CREATE . ", 2, 5), (" . OPERATION_UPDATE . ", 2, 5), (" . OPERATION_DELETE . ", 2, 5);
 ");
 
 $email = "admin@email.it";
