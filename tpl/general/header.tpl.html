@@ -5,9 +5,32 @@
         </div>
         <div class="header-right">
             <span class="username">{$logged_email}</span>
-            <div class="notification-icon">
+            <div class="notification-icon" id="notification-bell">
                 <i class="fas fa-bell"></i>
-                <span class="notification-badge">3</span>
+                {if $unread_notification_count > 0}
+                <span class="notification-badge">{$unread_notification_count}</span>
+                {/if}
+            </div>
+            <div id="notification-list" class="notification-list dropdown-menu" style="display: none; position: absolute; right: 0; top: 50px; z-index: 1000; min-width: 250px; max-width: 400px;">
+                <ul class="list-group">
+                    {foreach from=$user_notifications item=notification}
+                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                        <div>
+                            <p class="mb-1">{$notification.content}</p>
+                            <small class="text-muted">Inviato: {$notification.created_at|date_format:'%d/%m/%Y %H:%M'}</small>
+                        </div>
+                        {if $notification.read_at eq null}
+                        <button class="btn btn-sm btn-primary mark-as-read" data-notification-id="{$notification.id}" style="padding: 0.25rem 0.5rem; font-size: 0.7rem;">
+                            <i class="fas fa-check"></i>
+                        </button>
+                        {else}
+                        <span class="text-muted small">Letto</span>
+                        {/if}
+                    </li>
+                    {foreachelse}
+                    <li class="list-group-item">Nessuna notifica</li>
+                    {/foreach}
+                </ul>
             </div>
             <div class="profile-menu">
                 {if $profile_image}
@@ -23,3 +46,39 @@
         </div>
     </div>
 </header>
+
+<script>
+    $(document).ready(function() {
+        $('#notification-bell').click(function(e) {
+            e.stopPropagation();
+            $('#notification-list').toggle();
+        });
+
+        $(document).click(function() {
+            $('#notification-list').hide();
+        });
+
+        $('.mark-as-read').click(function(e) {
+            e.stopPropagation();
+            var notificationId = $(this).data('notification-id');
+            var button = $(this);
+
+            $.post('notifications.php', { action: 'mark_as_read', notification_id: notificationId }, function(response) {
+                if (response.status === 'success') {
+                    button.parent().parent().remove();
+                    var unreadCount = parseInt($('.notification-badge').text()) || 0;
+                    if (unreadCount > 1) {
+                        $('.notification-badge').text(unreadCount - 1);
+                    } else {
+                        $('.notification-badge').remove();
+                    }
+                    if ($('.list-group-item').length === 1) {
+                        $('#notification-list').html('<ul class="list-group"><li class="list-group-item">Nessuna notifica</li></ul>');
+                    }
+                } else {
+                    alert('Errore: ' + response.message);
+                }
+            }, 'json');
+        });
+    });
+</script>

@@ -9,7 +9,9 @@ if (!($conn = db_open(DB_HOST, DB_USER, DB_PASS, DB_NAME))) {
 executeQuery($conn, "INSERT INTO modules (name, icon) VALUES
     ('Base','fas fa-tachometer-alt'),
     ('Utenti','fas fa-users'),
-    ('Atleti','fas fa-user-friends')");
+    ('Atleti','fas fa-user-friends')"
+    ('Notifiche','fas fa-bell'));
+
 
 executeQuery($conn, "INSERT INTO environments (name, module_id, url) VALUES
     ('Dashboard', 1, 'dashboard.php'),
@@ -17,7 +19,8 @@ executeQuery($conn, "INSERT INTO environments (name, module_id, url) VALUES
     ('Ruoli', 2, 'roles.php'),
     ('Atleti', 3, 'athletes.php'),
     ('Profilo', 1, 'profile.php'),
-    ('Iscrizioni', 3, 'registrations.php')");
+    ('Iscrizioni', 3, 'registrations.php'),
+    ('Notifiche', 4, 'notifications.php')");
 
 executeQuery($conn, "INSERT INTO roles (name) VALUES
     ('Admin'),
@@ -29,7 +32,8 @@ executeQuery($conn, "INSERT INTO permissions (operation, role_id, environment_id
     (" . OPERATION_READ . ", 1, 3), (" . OPERATION_CREATE . ", 1, 3), (" . OPERATION_UPDATE . ", 1, 3), (" . OPERATION_DELETE . ", 1, 3),
     (" . OPERATION_READ . ", 2, 1), (" . OPERATION_CREATE . ", 2, 1), (" . OPERATION_UPDATE . ", 2, 1), (" . OPERATION_DELETE . ", 2, 1),
     (" . OPERATION_READ . ", 2, 4), (" . OPERATION_CREATE . ", 2, 4), (" . OPERATION_UPDATE . ", 2, 4), (" . OPERATION_DELETE . ", 2, 4),
-    (" . OPERATION_READ . ", 2, 5), (" . OPERATION_CREATE . ", 2, 5), (" . OPERATION_UPDATE . ", 2, 5), (" . OPERATION_DELETE . ", 2, 5);
+    (" . OPERATION_READ . ", 2, 5), (" . OPERATION_CREATE . ", 2, 5), (" . OPERATION_UPDATE . ", 2, 5), (" . OPERATION_DELETE . ", 2, 5),
+    (" . OPERATION_READ . ", 1, 6), (" . OPERATION_CREATE . ", 1, 6), (" . OPERATION_UPDATE . ", 1, 6), (" . OPERATION_DELETE . ", 1, 6);
 ");
 
 $email = "admin@email.it";

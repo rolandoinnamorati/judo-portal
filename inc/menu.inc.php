@@ -155,3 +155,46 @@ function userHasPermission($environment, $operation) {
 
     return $has_permission;
 }
+
+function getUnreadNotificationCount($conn, $user_id) {
+    $sql = "SELECT COUNT(*) FROM user_notifications WHERE user_id = ? AND read_at IS NULL";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $result->fetch_row()[0];
+}
+
+// Funzione per ottenere le notifiche di un utente
+function getUserNotifications($conn, $user_id) {
+    $sql = "SELECT 
+                n.id,
+                n.type,
+                n.content,
+                n.created_at,
+                un.read_at
+            FROM notifications n
+            JOIN user_notifications un ON n.id = un.notification_id
+            WHERE un.user_id = ?
+            ORDER BY n.created_at DESC"; // Ordina per data di creazione
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $notifications = [];
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $notifications[] = $row;
+        }
+    }
+    return $notifications;
+}
+
+// Calcola il numero di notifiche non lette e lo assegna a Smarty
+if ($user_id) {
+    $unread_notification_count = getUnreadNotificationCount($conn, $user_id);
+    $smarty->assign('unread_notification_count', $unread_notification_count);
+    $user_notifications = getUserNotifications($conn, $user_id);
+    $smarty->assign('user_notifications', $user_notifications);
+}
